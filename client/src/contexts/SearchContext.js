@@ -28,9 +28,10 @@ const searchReducer = (state, action) => {
       return {
         ...state,
         searchResults: action.payload.results,
-        currentSearch: action.payload.keyword,  // Update currentSearch so the UI knows a search has been made.
+        currentSearch: action.payload.keyword,
         pagination: action.payload.pagination,
         error: null,
+        loading: false  // set loading to false here
       };
     case 'SET_SEARCH_HISTORY':
       return { ...state, searchHistory: action.payload };
@@ -43,7 +44,8 @@ const searchReducer = (state, action) => {
         ...state, 
         searchResults: [],
         currentSearch: null,
-        error: null
+        error: null,
+        loading: false   // clear loading flag too
       };
     default:
       return state;
