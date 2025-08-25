@@ -14,18 +14,13 @@ export const SearchPage = () => {
     resetSearch
   } = useSearch();
   const [showStats, setShowStats] = useState(true);
-  // New state which tracks if a search was submitted.
   const [submitted, setSubmitted] = useState(false);
 
-  // When SearchPage mounts, clear any stale data
   useEffect(() => {
     resetSearch();
     setSubmitted(false);
-  }, [resetSearch]);
+  }, []); // Run once on mount only
 
-  // Instead of computing hasSearched from currentSearch, we use our 'submitted' flag.
-  // For example, in your SearchForm component, make sure that after a successful search,
-  // you also call setSubmitted(true).
   
   return (
     <div className="space-y-8">
