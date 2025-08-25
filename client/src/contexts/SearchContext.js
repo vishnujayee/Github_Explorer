@@ -30,11 +30,16 @@ const searchReducer = (state, action) => {
       return {
         ...state,
         searchResults: action.payload.results,
-        // Ensure currentSearch gets set to a valid (non-empty) value:
         currentSearch: action.payload.keyword,
         pagination: action.payload.pagination,
         error: null,
         loading: false,
+      };
+
+    case 'SET_STATS':
+      return {
+        ...state,
+        stats: action.payload,
       };
 
     case 'RESET_SEARCH':
@@ -45,6 +50,7 @@ const searchReducer = (state, action) => {
         error: null,
         loading: false
       };
+
     default:
       return state;
   }
