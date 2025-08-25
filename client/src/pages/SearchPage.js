@@ -74,7 +74,7 @@ export const SearchPage = () => {
       )}
 
       {/* Search Results */}
-      {submitted && !loading && !error && searchResults && searchResults.length > 0 && (
+      {!loading && !error && searchResults && searchResults.length > 0 && (
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <h2 className="text-2xl font-semibold text-gray-900">
