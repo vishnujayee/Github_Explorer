@@ -22,30 +22,28 @@ const searchReducer = (state, action) => {
   switch (action.type) {
     case 'SET_LOADING':
       return { ...state, loading: action.payload };
-    case 'SET_ERROR':
-      return { ...state, error: action.payload, loading: false };
+      
+    case 'CLEAR_ERROR':
+      return { ...state, error: null };
+
     case 'SET_SEARCH_RESULTS':
       return {
         ...state,
         searchResults: action.payload.results,
+        // Ensure currentSearch gets set to a valid (non-empty) value:
         currentSearch: action.payload.keyword,
         pagination: action.payload.pagination,
         error: null,
-        loading: false  // set loading to false here
+        loading: false,
       };
-    case 'SET_SEARCH_HISTORY':
-      return { ...state, searchHistory: action.payload };
-    case 'SET_STATS':
-      return { ...state, stats: action.payload };
-    case 'CLEAR_ERROR':
-      return { ...state, error: null };
+
     case 'RESET_SEARCH':
       return { 
         ...state, 
         searchResults: [],
         currentSearch: null,
         error: null,
-        loading: false   // clear loading flag too
+        loading: false
       };
     default:
       return state;
@@ -88,7 +86,8 @@ export const SearchProvider = ({ children }) => {
         type: 'SET_SEARCH_RESULTS',
         payload: {
           results: response.data.data.results,
-          keyword: response.data.data.keyword,
+          // Fallback to the original search term if the API doesn't return a keyword
+          keyword: response.data.data.keyword || keyword,
           pagination: {
             total: response.data.data.totalCount,
             page,
