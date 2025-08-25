@@ -14,15 +14,19 @@ export const SearchPage = () => {
     resetSearch
   } = useSearch();
   const [showStats, setShowStats] = useState(true);
+  // New state which tracks if a search was submitted.
+  const [submitted, setSubmitted] = useState(false);
 
   // When SearchPage mounts, clear any stale data
   useEffect(() => {
     resetSearch();
+    setSubmitted(false);
   }, [resetSearch]);
 
-  // Check if a search has been initiated
-  const hasSearched = currentSearch && currentSearch.trim() !== '';
-
+  // Instead of computing hasSearched from currentSearch, we use our 'submitted' flag.
+  // For example, in your SearchForm component, make sure that after a successful search,
+  // you also call setSubmitted(true).
+  
   return (
     <div className="space-y-8">
       {/* Header */}
@@ -36,7 +40,7 @@ export const SearchPage = () => {
       </div>
 
       {/* Search Form */}
-      <SearchForm />
+      <SearchForm onSubmit={() => setSubmitted(true)} />
 
       {/* Statistics Section */}
       {showStats && stats && (
@@ -75,7 +79,7 @@ export const SearchPage = () => {
       )}
 
       {/* Search Results */}
-      {hasSearched && !loading && !error && searchResults && searchResults.length > 0 && (
+      {submitted && !loading && !error && searchResults && searchResults.length > 0 && (
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <h2 className="text-2xl font-semibold text-gray-900">
@@ -90,7 +94,7 @@ export const SearchPage = () => {
       )}
 
       {/* No Results Found */}
-      {hasSearched && !loading && !error && ( !searchResults || searchResults.length === 0 ) && (
+      {submitted && !loading && !error && ( !searchResults || searchResults.length === 0 ) && (
         <div className="text-center py-12">
           <div className="text-gray-400 mb-4">
             <svg className="mx-auto h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -108,7 +112,7 @@ export const SearchPage = () => {
       )}
 
       {/* Initial Prompt (Before any search is made) */}
-      {!hasSearched && !loading && !error && (
+      {!submitted && !loading && !error && (
         <div className="text-center py-12">
           <div className="text-gray-400 mb-4">
             <svg className="mx-auto h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
