@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer, useEffect } from 'react';
+import React, { createContext, useContext, useReducer, useEffect, useMemo } from 'react';
 import axios from 'axios';
 
 const SearchContext = createContext();
@@ -54,9 +54,14 @@ const searchReducer = (state, action) => {
 export const SearchProvider = ({ children }) => {
   const [state, dispatch] = useReducer(searchReducer, initialState);
 
-  // Use API base URL consistently
-  const API_BASE = (process.env.REACT_APP_API_URL || 'http://localhost:5000/api').replace(/\/+$/, '');
-  console.log('Using API_BASE:', API_BASE);
+  // Memoize the API_BASE so it's computed only once
+  const API_BASE = useMemo(() => {
+    return (process.env.REACT_APP_API_URL || 'http://localhost:5000/api').replace(/\/+$/, '');
+  }, []);
+
+  useEffect(() => {
+    console.log('Using API_BASE:', API_BASE);
+  }, [API_BASE]);
 
   // Search GitHub repositories
   const searchGitHub = async (keyword, page = 1, perPage = 30) => {
